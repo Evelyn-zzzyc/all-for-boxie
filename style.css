@@ -1,12 +1,155 @@
+:root {
+  /* 主色调 */
+  --primary: #7e57c2;       /* 紫色主色 */
+  --primary-dark: #5e35b1;  /* 深紫 */
+  --primary-light: #b085f5; /* 浅紫 */
+  --background: #1e1e2f;    /* 深紫背景 */
+  --surface: #2a2a3d;       /* 卡片背景 */
+  --text: #f5f5f5;          /* 主文字颜色 */
+  --text-muted: #cfcfcf;    /* 次要文字颜色 */
+  --accent: #d1aaff;        /* 辅助色（柔和浅紫，用于高亮） */
+  --primary-shadow: rgba(126, 87, 194, 0.4); /* 阴影色 */
+}
+
+* { box-sizing: border-box; }
+
 body {
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
   margin: 0;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+header, main {
+  max-width: 960px;
+  margin: 0 auto;
   padding: 16px;
 }
-main {
-  max-width: 800px;
-  margin: 0 auto;
-}
+
 h1 {
-  color: #333;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+
+  /* 紫蓝渐变文字 */
+  background: linear-gradient(90deg, #9b5de5, #4361ee, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* 更锐利的光效 */
+  text-shadow: 0 0 4px rgba(155,93,229,0.8),
+               0 0 8px rgba(67,97,238,0.7);
+}
+
+h2, h3, h4 {
+  color: var(--primary);
+}
+
+/* 导航链接：稍微醒目，但不刺眼 */
+nav a {
+  margin-right: 12px;
+  text-decoration: none;
+  color: var(--primary-light);
+  font-weight: 600;
+}
+nav a:hover {
+  color: var(--accent); /* 柔和浅紫高亮 */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--primary-dark);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px var(--primary-shadow);
+
+  /* 统一卡片布局 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p,
+.card ul,
+.card small {
+  margin-bottom: 12px;
+}
+
+.card a {
+  margin-top: auto;          /* 自动贴到底部 */
+  text-align: center;
+  color: var(--primary-light);
+  font-weight: 500;
+  text-decoration: none;
+}
+.card a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+th, td {
+  border-bottom: 1px solid var(--primary-dark);
+  padding: 8px;
+  text-align: left;
+  color: var(--text);
+}
+th {
+  background-color: var(--primary-dark);
+  color: var(--text);
+}
+tr:hover {
+  background-color: var(--surface);
+}
+
+footer {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  border-top: 1px solid var(--primary-dark);
+}
+
+small.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--text-muted);
+}
+
+/* 时间轴列表样式修正 */
+#timeline {
+  list-style: none;   /* 去掉默认圆点 */
+  padding: 0;         /* 去掉缩进 */
+  margin: 0;          /* 去掉外边距 */
+}
+
+#timeline li {
+  line-height: 1.8;   /* 行距更舒适 */
+  margin: 6px 0;      /* 每条记录之间留间距 */
+  padding: 0;         /* 去掉缩进 */
+}
+
+/* 主页最近健康事件 */
+#recentHealth {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#recentHealth li {
+  line-height: 1.8;
+  margin: 6px 0;
+  padding: 0;
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boxie · 体重记录</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>体重记录</h1>
+  <nav>
+    <a href="index.html">主页</a>
+    <a href="weight.html">体重</a>
+    <a href="health.html">健康</a>
+    <a href="expenses.html">消费</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 折线图 -->
+  <section class="card">
+    <h3>体重趋势</h3>
+    <div id="chart"><small>加载中…</small></div>
+  </section>
+
+  <!-- 表格 -->
+  <section class="card">
+    <h3>体重明细</h3>
+    <table id="table">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>体重 (kg)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  <small class="mono">更新方式：在 data/weight.json 追加新记录并提交推送</small>
+</footer>
+
+<script type="module" src="./js/weight.js"></script>
+</body>
+</html>

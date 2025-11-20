@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boxie · 日常消费</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>日常消费记录</h1>
+  <nav>
+    <a href="index.html">主页</a>
+    <a href="weight.html">体重</a>
+    <a href="health.html">健康</a>
+    <a href="expenses.html">消费</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 月份选择器 -->
+  <section class="card">
+    <h3>选择月份</h3>
+    <select id="monthSelect"></select>
+    <select id="tagSelect">
+      <option value="all">全部类别</option>
+      <option value="食物">食物</option>
+      <option value="玩具">玩具</option>
+      <option value="用品">用品</option>
+      <option value="设备">设备</option>
+      <option value="医疗">医疗</option>
+    </select>
+  </section>
+
+  <!-- 饼图 -->
+  <section class="card">
+    <h3>消费分类占比</h3>
+    <div id="pie"><small>加载中…</small></div>
+    <p id="monthTotal"></p>
+    <p id="allTotal"></p>
+  </section>
+
+
+  <!-- 表格 -->
+  <section class="card">
+    <h3>消费明细</h3>
+    <table id="table">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>类别</th>
+          <th>项目</th>
+          <th>金额</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<footer>更新方式：在 data/expenses.json 追加新记录并提交推送</footer>
+
+<script type="module" src="./js/expenses.js"></script>
+</body>
+</html>

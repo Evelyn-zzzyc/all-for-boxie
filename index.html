@@ -3,14 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>All for Boxie</title>
+  <title>All for Boxie · 主页</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main>
-    <h1>Boxie</h1>
-    <p>这里记录我的猫 Boxie 的生活和健康。</p>
-  </main>
-  <script src="script.js"></script>
+<header>
+  <h1>All for Boxie</h1>
+  <nav>
+    <a href="index.html">主页</a>
+    <a href="weight.html">体重</a>
+    <a href="health.html">健康</a>
+    <a href="expenses.html">消费</a>
+  </nav>
+</header>
+
+<main id="dashboard" class="grid">
+  <!-- 最近体重 -->
+  <section class="card">
+    <h3>最近体重</h3>
+    <p id="lastWeight">加载中…</p>
+    <a href="weight.html">查看体重详情</a>
+  </section>
+
+  <!-- 最近健康事件 -->
+  <section class="card">
+    <h3>最近健康事件</h3>
+    <ul id="recentHealth"></ul>
+    <a href="health.html">查看健康记录</a>
+  </section>
+
+  <!-- 本月日常消费 -->
+  <section class="card">
+    <h3>本月日常消费</h3>
+    <p id="dailyTotal">¥0</p>
+    <small id="maxExpense"></small><br/>
+    <a href="expenses.html">查看消费详情</a>
+  </section>
+</main>
+
+<!-- ✅ 统一的底部提示 -->
+<footer>更新方式：修改 data/*.json 并提交推送</footer>
+
+<script type="module">
+import { loadJSON, sum, groupByMonth } from "./js/utils.js";
+
+(async function(){
+  // 最近体重
+  const weights = await loadJSON("./data/weight.json");
+  const w = weights.at(-1);
+  document.getElementById("lastWeight").textContent = w ? `${w.kg} kg（${w.date}）` : "暂无体重数据";
+
+  // 最近健康事件（取 3 条）
+  const h = await loadJSON("./data/health.json");
+  const events = [
+    ...(h.deworming||[]).map(d=>({type:"驱虫", date:d.date, note:d.drug||d.note||""})),
+    ...(h.vaccines||[]).map(v=>({type:"疫苗", date:v.date, note:v.type||v.note||""})),
+    ...(h.neuter?.date ? [{type:"绝育", date:h.neuter.date, note:h.neuter.hospital||h.neuter.note||""}] : [])
+  ].sort((a,b)=> new Date(b.date) - new Date(a.date)).slice(0,3);
+  document.getElementById("recentHealth").innerHTML = events.length
+  ? events.map(e=>`<li>${e.date} · ${e.type} · ${e.note}</li>`).join("")
+  : "<li>暂无健康事件</li>";
+
+
+
+  // 本月消费（只统计 daily）
+  const exp = await loadJSON("./data/expenses.json");
+  const daily = exp.daily || [];
+
+  const now = new Date();
+  const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+  const dailyByMonth = groupByMonth(daily, e=>e.date);
+
+  const dailyCurrent = dailyByMonth.get(monthKey) || [];
+
+  // 日常消费总额
+  document.getElementById("dailyTotal").textContent = `¥${sum(dailyCurrent, e=>e.cost)}`;
+  // 最大一笔日常消费
+  const max = dailyCurrent.sort((a,b)=>b.cost-a.cost)[0];
+  document.getElementById("maxExpense").textContent = max ? `最大消费：${max.item} · ¥${max.cost}` : "";
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boxie · 健康记录</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>健康记录</h1>
+  <nav>
+    <a href="index.html">主页</a>
+    <a href="weight.html">体重</a>
+    <a href="health.html">健康</a>
+    <a href="expenses.html">消费</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 时间轴 -->
+  <section class="card">
+    <h3>时间轴（最近）</h3>
+    <ul id="timeline"></ul>
+  </section>
+
+  <!-- 驱虫 / 疫苗 / 绝育 -->
+  <section class="card">
+    <h3>驱虫 / 疫苗 / 绝育</h3>
+    <div class="grid">
+      <div>
+        <h4>驱虫</h4>
+        <table id="deworm">
+          <thead>
+            <tr><th>日期</th><th>药品</th><th>备注</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <h4>疫苗</h4>
+        <table id="vacc">
+          <thead>
+            <tr><th>日期</th><th>种类</th><th>医院</th><th>备注</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <h4>绝育</h4>
+        <table id="neuter">
+          <thead>
+            <tr><th>日期</th><th>医院</th><th>备注</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>更新方式：修改 data/health.json 并提交推送</footer>
+
+<script type="module">
+import { loadJSON } from "./js/utils.js";
+
+(async function(){
+  const h = await loadJSON("./data/health.json");
+
+  // 时间轴事件（只保留驱虫、疫苗、绝育）
+  const events = [
+    ...(h.deworming||[]).map(d=>({type:"驱虫", date:d.date, note:d.drug||d.note||""})),
+    ...(h.vaccines||[]).map(v=>({type:"疫苗", date:v.date, note:(v.type||"") + (v.hospital?` · ${v.hospital}`:"")})),
+    ...(h.neuter?.date ? [{type:"绝育", date:h.neuter.date, note:h.neuter.hospital||h.neuter.note||""}] : [])
+  ].sort((a,b)=> new Date(b.date) - new Date(a.date)).slice(0,10);
+
+  document.getElementById("timeline").innerHTML = events.length
+    ? events.map(e=>`<li>${e.date} · ${e.type} · ${e.note}</li>`).join("")
+    : "<li>暂无记录</li>";
+
+  // 表格填充函数
+  const fill = (id, rows, map) => {
+    const tbody = document.querySelector(`#${id} tbody`);
+    tbody.innerHTML = rows.map(map).join("");
+  };
+
+  // 驱虫表格
+  fill("deworm", (h.deworming||[]).slice().reverse(),
+    d=>`<tr><td>${d.date}</td><td>${d.drug||""}</td><td>${d.note||""}</td></tr>`);
+
+  // 疫苗表格
+  fill("vacc", (h.vaccines||[]).slice().reverse(),
+    v=>`<tr><td>${v.date}</td><td>${v.type||""}</td><td>${v.hospital||""}</td><td>${v.note||""}</td></tr>`);
+
+  // 绝育表格
+  fill("neuter", h.neuter?.date ? [h.neuter] : [],
+    n=>`<tr><td>${n.date}</td><td>${n.hospital||""}</td><td>${n.note||""}</td></tr>`);
+})();
+</script>
+</body>
+</html>
