@@ -28,16 +28,39 @@ import { loadJSON, sum, groupByMonth, pieChartSVG } from "./utils.js";
     // 按标签过滤
     const filtered = tag === "all" ? current : current.filter(e => e.category === tag);
 
-    // 饼图数据（中文类别）
-    const cats = ["食物","玩具","用品","设备","医疗用品"];
-    const pieData = cats.map(cat => ({
-      label: cat,
-      value: sum(filtered, e => e.category === cat ? e.cost : 0)
-    })).filter(e => e.value > 0);
+    // 饼图或类别消费统计
+    const pieDiv = document.getElementById("pie");
+    if (tag === "all") {
+      const cats = ["食物","玩具","用品","设备","医疗"];
+      const pieData = cats.map(cat => ({
+        label: cat,
+        value: sum(filtered, e => e.category === cat ? e.cost : 0)
+      })).filter(e => e.value > 0);
 
-    document.getElementById("pie").innerHTML = pieData.length 
-      ? pieChartSVG(pieData) 
-      : "<small>暂无数据</small>";
+      pieDiv.innerHTML = pieData.length 
+        ? pieChartSVG(pieData) 
+        : "<small>暂无数据</small>";
+    } else {
+      const totalCatMonth = sum(current.filter(e => e.category === tag), e => e.cost);
+      const totalCatAll = sum(daily.filter(e => e.category === tag), e => e.cost);
+
+      let extraLine = "";
+      if (month === "all") {
+        // 所有累计 + 某类别 → 显示整体累计消费
+        const overall = sum(daily, e => e.cost);
+        extraLine = `<p>整体累计消费：¥${overall.toFixed(2)}</p>`;
+      } else {
+        // 单独月份 + 某类别 → 显示该月份总消费
+        const totalMonth = sum(current, e => e.cost);
+        extraLine = `<p>本月总计消费：¥${totalMonth.toFixed(2)}</p>`;
+      }
+
+      pieDiv.innerHTML = `
+        <p>${tag}本月消费：¥${totalCatMonth.toFixed(2)}</p>
+        <p>${tag}累计消费：¥${totalCatAll.toFixed(2)}</p>
+        ${extraLine}
+      `;
+    }
 
     // 表格
     const tbody = document.querySelector("#table tbody");
@@ -46,19 +69,30 @@ import { loadJSON, sum, groupByMonth, pieChartSVG } from "./utils.js";
         <td>${e.date}</td>
         <td>${e.category}</td>
         <td>${e.item}${e.brand ? `(${e.brand})` : ""}</td>
-        <td>¥${e.cost}</td>
+        <td>¥${e.cost.toFixed(2)}</td>
         <td>${e.note || ""}</td>
       </tr>`
     ).join("");
 
-    // 每月总消费或累计总消费
-    const monthTotal = sum(current, e => e.cost);
-    document.getElementById("monthTotal").textContent = 
-      month === "all" ? `累计总消费：¥${monthTotal.toFixed(2)}` : `本月总消费：¥${monthTotal.toFixed(2)}`;
+    // 顶部汇总信息（仅在 tag === "all" 时显示）
+    if (tag === "all") {
+      let monthTotalText = "";
+      if (month === "all") {
+        const totalAll = sum(daily, e => e.cost);
+        monthTotalText = `累计总消费：¥${totalAll.toFixed(2)}`;
+      } else {
+        const totalMonth = sum(current, e => e.cost);
+        monthTotalText = `本月总消费：¥${totalMonth.toFixed(2)}`;
+      }
+      document.getElementById("monthTotal").textContent = monthTotalText;
 
-    // 累计总消费（始终显示）
-    const allTotal = sum(daily, e => e.cost);
-    document.getElementById("allTotal").textContent = `全部累计消费：¥${allTotal.toFixed(2)}`;
+      const overall = sum(daily, e => e.cost);
+      document.getElementById("allTotal").textContent = `整体累计消费：¥${overall.toFixed(2)}`;
+    } else {
+      // 如果是具体类别，顶部的 monthTotal/allTotal 清空，避免重复
+      document.getElementById("monthTotal").textContent = "";
+      document.getElementById("allTotal").textContent = "";
+    }
   }
 
   // 事件绑定
