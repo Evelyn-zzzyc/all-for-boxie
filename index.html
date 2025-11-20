@@ -20,26 +20,36 @@
 <main id="dashboard" class="grid">
   <!-- 最近体重 -->
   <section class="card">
-    <h3>最近体重</h3>
-    <p id="lastWeight">加载中…</p>
-    <a href="weight.html">查看体重详情</a>
+    <h3>⚖️ 最近体重</h3>
+    <p class="highlight">
+      <span id="weightValue">加载中…</span><br/>
+      <span id="weightDate" class="muted"></span>
+    </p>
+    <a class="button" href="weight.html">查看体重详情</a>
   </section>
 
-  <!-- 最近健康事件 -->
+  <!-- 最近健康事件（只显示最新一条） -->
   <section class="card">
-    <h3>最近健康事件</h3>
-    <ul id="recentHealth"></ul>
-    <a href="health.html">查看健康记录</a>
+    <h3>💊 最近健康事件</h3>
+    <p class="highlight">
+      <span id="healthSummary">加载中…</span><br/>
+      <span id="healthDate" class="muted"></span>
+    </p>
+    <a class="button" href="health.html">查看健康记录</a>
   </section>
 
   <!-- 本月日常消费 -->
   <section class="card">
-    <h3>本月日常消费</h3>
-    <p id="dailyTotal">¥0</p>
-    <small id="maxExpense"></small><br/>
-    <a href="expenses.html">查看消费详情</a>
+    <h3>💰 本月日常消费</h3>
+    <p class="highlight">
+      <span id="dailyTotal">¥0</span><br/>
+      <span id="maxExpense" class="muted"></span>
+    </p>
+    <a class="button" href="expenses.html">查看消费详情</a>
   </section>
 </main>
+
+
 
 <!-- ✅ 统一的底部提示 -->
 <footer>更新方式：修改 data/*.json 并提交推送</footer>
@@ -51,18 +61,31 @@ import { loadJSON, sum, groupByMonth } from "./js/utils.js";
   // 最近体重
   const weights = await loadJSON("./data/weight.json");
   const w = weights.at(-1);
-  document.getElementById("lastWeight").textContent = w ? `${w.kg} kg（${w.date}）` : "暂无体重数据";
+  if (w) {
+    document.getElementById("weightValue").textContent = `${w.kg} kg`;
+    document.getElementById("weightDate").textContent = `记录日期：${w.date}`;
+  } else {
+    document.getElementById("weightValue").textContent = "暂无体重数据";
+    document.getElementById("weightDate").textContent = "";
+  }
 
-  // 最近健康事件（取 3 条）
+
+// 最近健康事件（只显示最新一条）
   const h = await loadJSON("./data/health.json");
   const events = [
     ...(h.deworming||[]).map(d=>({type:"驱虫", date:d.date, note:d.drug||d.note||""})),
     ...(h.vaccines||[]).map(v=>({type:"疫苗", date:v.date, note:v.type||v.note||""})),
     ...(h.neuter?.date ? [{type:"绝育", date:h.neuter.date, note:h.neuter.hospital||h.neuter.note||""}] : [])
-  ].sort((a,b)=> new Date(b.date) - new Date(a.date)).slice(0,3);
-  document.getElementById("recentHealth").innerHTML = events.length
-  ? events.map(e=>`<li>${e.date} · ${e.type} · ${e.note}</li>`).join("")
-  : "<li>暂无健康事件</li>";
+  ].sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+  if (events.length) {
+    document.getElementById("healthSummary").textContent = `${events[0].type} · ${events[0].note}`;
+    document.getElementById("healthDate").textContent = `记录日期：${events[0].date}`;
+  } else {
+    document.getElementById("healthSummary").textContent = "暂无健康事件";
+    document.getElementById("healthDate").textContent = "";
+  }
+
 
 
 

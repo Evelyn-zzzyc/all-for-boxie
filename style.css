@@ -153,3 +153,47 @@ small.mono {
   margin: 6px 0;
   padding: 0;
 }
+
+/* 高亮数字或主数据 */
+.highlight {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* 次要说明文字 */
+.muted {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* 查看详情按钮样式 */
+.button {
+  display: inline-block;
+  margin-top: auto;
+  padding: 8px 12px;
+  background-color: var(--primary-dark);
+  color: var(--text);
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: var(--primary-light);
+  color: var(--background);
+}
+
+@media (max-width: 600px) {
+  .highlight {
+    font-size: 1.4rem;
+  }
+  .card {
+    padding: 12px;
+  }
+  h3 {
+    font-size: 1.2rem;
+  }
+}
