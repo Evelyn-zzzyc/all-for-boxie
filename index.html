@@ -18,6 +18,21 @@
 </header>
 
 <main id="dashboard" class="grid">
+  <!-- 猫咪简介卡片，单独一行 -->
+  <section class="card cat-profile full-width">
+  <h3>❤️ THAT'S MY CAAAAAAAT!</h3>
+  <div class="cat-profile-content">
+    <div class="cat-photos single">
+      <figure class="photo"><img src="images/boxie-1.jpg" /></figure>
+    </div>
+    <div class="cat-info">
+      <div class="row"><span class="label">姓名</span><span class="value">Boxie</span></div>
+      <div class="row"><span class="label">性别</span><span class="value">Girl</span></div>
+      <div class="row"><span class="label">出生</span><span class="value">2025-08-18</span></div>
+      <div class="row"><span class="label">年龄</span><span id="catAge" class="value">—</span></div>
+    </div>
+  </div>
+</section>
   <!-- 最近体重 -->
   <section class="card">
     <h3>⚖️ 最近体重</h3>
@@ -56,6 +71,23 @@
 
 <script type="module">
 import { loadJSON, sum, groupByMonth } from "./js/utils.js";
+
+// 猫咪年龄计算函数
+function calculateAge(dobISO) {
+  const dob = new Date(dobISO);
+  const now = new Date();
+  let months = (now.getFullYear() - dob.getFullYear()) * 12 + (now.getMonth() - dob.getMonth());
+  if (now.getDate() < dob.getDate()) months -= 1;
+  const years = Math.floor(months / 12);
+  const remainMonths = months % 12;
+  if (years === 0) return `${remainMonths}个月`;
+  if (remainMonths === 0) return `${years}岁`;
+  return `${years}岁${remainMonths}个月`;
+}
+
+// 在页面加载时更新年龄
+document.getElementById("catAge").textContent = calculateAge("2025-08-18");
+
 
 (async function(){
   // 最近体重
