@@ -4,6 +4,13 @@ import { loadJSON, sum, groupByMonth, pieChartSVG } from "./utils.js";
   const expenses = await loadJSON("./data/expenses.json");
   const daily = expenses.daily || [];
 
+  // 最近消费（取最后一条记录）
+  if (daily.length > 0) {
+    const latest = daily[daily.length - 1];
+    document.getElementById("recentExpense").textContent = `¥${latest.cost.toFixed(2)}`;
+    document.getElementById("recentExpenseDate").textContent = latest.date;
+  }
+
   // 按月份分组
   const byMonth = groupByMonth(daily, e => e.date);
   const months = Array.from(byMonth.keys()).sort();
@@ -46,11 +53,9 @@ import { loadJSON, sum, groupByMonth, pieChartSVG } from "./utils.js";
 
       let extraLine = "";
       if (month === "all") {
-        // 所有累计 + 某类别 → 显示整体累计消费
         const overall = sum(daily, e => e.cost);
         extraLine = `<p>整体累计消费：¥${overall.toFixed(2)}</p>`;
       } else {
-        // 单独月份 + 某类别 → 显示该月份总消费
         const totalMonth = sum(current, e => e.cost);
         extraLine = `<p>本月总计消费：¥${totalMonth.toFixed(2)}</p>`;
       }
@@ -89,7 +94,6 @@ import { loadJSON, sum, groupByMonth, pieChartSVG } from "./utils.js";
       const overall = sum(daily, e => e.cost);
       document.getElementById("allTotal").textContent = `整体累计消费：¥${overall.toFixed(2)}`;
     } else {
-      // 如果是具体类别，顶部的 monthTotal/allTotal 清空，避免重复
       document.getElementById("monthTotal").textContent = "";
       document.getElementById("allTotal").textContent = "";
     }

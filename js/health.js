@@ -13,7 +13,7 @@ import { loadJSON } from "./utils.js";
   // 最近健康事件摘要
   if (events.length) {
     document.getElementById("healthSummary").textContent = `${events[0].type} · ${events[0].note}`;
-    document.getElementById("healthDate").textContent = `记录日期：${events[0].date}`;
+    document.getElementById("healthDate").textContent = `${events[0].date}`;
   } else {
     document.getElementById("healthSummary").textContent = "暂无健康事件";
     document.getElementById("healthDate").textContent = "";

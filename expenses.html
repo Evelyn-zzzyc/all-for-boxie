@@ -13,24 +13,35 @@
     <a href="index.html">主页</a>
     <a href="weight.html">体重</a>
     <a href="health.html">健康</a>
-    <a href="expenses.html">消费</a>
+    <a href="expenses.html" class="active">消费</a>
   </nav>
 </header>
 
 <main>
-  <!-- 月份选择器 -->
+  <!-- 最近消费记录 -->
   <section class="card">
-    <h3>选择月份</h3>
-    <select id="monthSelect"></select>
-    <select id="tagSelect">
-      <option value="all">全部类别</option>
-      <option value="食物">食物</option>
-      <option value="玩具">玩具</option>
-      <option value="用品">用品</option>
-      <option value="设备">设备</option>
-      <option value="医疗">医疗</option>
-    </select>
+    <h3>💰 最近消费</h3>
+    <p class="highlight">
+      <span id="recentExpense">加载中…</span><br/>
+      <span id="recentExpenseDate" class="muted"></span>
+    </p>
   </section>
+
+  <!-- 月份选择器 -->
+  <section class="card selectors">
+    <h3>选择条件</h3>
+    <div class="select-row">
+        <select id="monthSelect"></select>
+        <select id="tagSelect">
+        <option value="all">全部类别</option>
+        <option value="食物">食物</option>
+        <option value="玩具">玩具</option>
+        <option value="用品">用品</option>
+        <option value="设备">设备</option>
+        <option value="医疗">医疗</option>
+        </select>
+    </div>
+    </section>
 
   <!-- 饼图 / 类别总消费 -->
   <section class="card" id="pieSection">
@@ -58,7 +69,9 @@
   </section>
 </main>
 
-<footer>更新方式：在 data/expenses.json 追加新记录并提交推送</footer>
+<footer>
+  <small class="mono">更新方式：在 data/expenses.json 追加新记录并提交推送</small>
+</footer>
 
 <script type="module" src="./js/expenses.js"></script>
 </body>
