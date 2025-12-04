@@ -31,6 +31,7 @@
     { "date": "2025-10-25", "category": "医疗", "item": "治疗费", "cost": 167.2 },
     { "date": "2025-11-17", "category": "医疗", "item": "治疗费", "cost": 80 },
     { "date": "2025-11-20", "category": "食物", "item": "猫粮", "cost": 97.6 },
-    { "date": "2025-11-20", "category": "用品", "item": "猫湿巾", "cost": 9.71 }
+    { "date": "2025-11-20", "category": "用品", "item": "猫湿巾", "cost": 9.71 },
+    { "date": "2025-11-21", "category": "用品", "item": "航空箱", "cost": 69.08 }
   ]
 }
