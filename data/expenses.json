@@ -34,6 +34,12 @@
     { "date": "2025-11-20", "category": "用品", "item": "猫湿巾", "cost": 9.71 },
     { "date": "2025-12-01", "category": "用品", "item": "航空箱", "cost": 69.08 },
     { "date": "2025-12-05", "category": "用品", "item": "猫草盆", "cost": 8.6 },
-    { "date": "2025-12-11", "category": "食物", "item": "猫粮", "cost": 135.95 }
+    { "date": "2025-12-11", "category": "食物", "item": "猫粮", "cost": 135.95 },
+    { "date": "2026-01-09", "category": "食物", "item": "猫粮", "cost": 136.97 },
+    { "date": "2026-01-10", "category": "玩具", "item": "摇摇乐", "cost": 7.92 },
+    { "date": "2026-01-10", "category": "食物", "item": "猫冻干", "cost": 99 },
+    { "date": "2026-01-13", "category": "用品", "item": "猫包", "cost": 100.64 }
+
+
   ]
 }
